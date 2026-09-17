@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { User, Mail, Lock, LockKeyhole } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,23 +22,51 @@ export default function SignUp() {
       <form className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="nama">Nama Lengkap</Label>
-          <Input id="nama" type="text" placeholder="Nama sesuai ijazah" />
+          <div className="relative">
+            <User className="top-1/2 left-3 absolute size-4 text-muted-foreground -translate-y-1/2" />
+            <Input
+              id="nama"
+              type="text"
+              placeholder="Nama sesuai ijazah"
+              className="pl-9"
+            />
+          </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="nama@email.com" />
+          <div className="relative">
+            <Mail className="top-1/2 left-3 absolute size-4 text-muted-foreground -translate-y-1/2" />
+            <Input
+              id="email"
+              type="email"
+              placeholder="nama@email.com"
+              className="pl-9"
+            />
+          </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="Minimal 8 karakter"
-          />
+          <div className="relative">
+            <Lock className="top-1/2 left-3 absolute size-4 text-muted-foreground -translate-y-1/2" />
+            <Input
+              id="password"
+              type="password"
+              placeholder="Minimal 8 karakter"
+              className="pl-9"
+            />
+          </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="confirm">Konfirmasi Password</Label>
-          <Input id="confirm" type="password" placeholder="Ulangi password" />
+          <div className="relative">
+            <LockKeyhole className="top-1/2 left-3 absolute size-4 text-muted-foreground -translate-y-1/2" />
+            <Input
+              id="confirm"
+              type="password"
+              placeholder="Ulangi password"
+              className="pl-9"
+            />
+          </div>
         </div>
 
         <Button

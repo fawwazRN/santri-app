@@ -1,43 +1,79 @@
 import { Link } from "react-router";
+import { Sparkles, ArrowRight, PlayCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export default function HeroSection() {
   return (
-    <section id="home">
-      <Card className="shadow-lg border-none overflow-hidden">
-        <CardContent className="p-0">
-          <AspectRatio ratio={16 / 9}>
-            <img
-              src="https://picsum.photos/1200/675" // ganti: /images/hero.jpg
-              alt="Masjid Pesantren Abu Dzar"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-emerald-950/90 via-emerald-950/40 to-transparent" />
-            <div className="bottom-0 absolute inset-x-0 space-y-4 p-6 md:p-10 text-white">
-              <h1 className="font-bold text-3xl md:text-4xl">
-                Selamat Datang di Pesantren Abu Dzar
+    <section
+      id="home"
+      className="relative mx-auto px-4 py-8 md:py-12 max-w-7xl overflow-hidden">
+      <div className="relative bg-slate-950 shadow-2xl border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden">
+        <AspectRatio
+          ratio={16 / 9}
+          className="relative min-h-[500px] md:min-h-[600px]">
+          {/* Background Image */}
+          <img
+            src="https://picsum.photos/1200/675"
+            alt="Masjid Pesantren Abu Dzar"
+            className="opacity-60 w-full h-full object-cover scale-105 hover:scale-100 transition-transform duration-1000 ease-out transform"
+          />
+
+          {/* Cinematic Overlay Gradients */}
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/40 to-transparent" />
+
+          {/* Hero Content Layer */}
+          <div className="absolute inset-0 flex items-end md:items-center p-6 md:p-16">
+            <div className="space-y-6 max-w-2xl text-white">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 bg-emerald-950/80 backdrop-blur-md px-3.5 py-1.5 border border-emerald-500/30 rounded-full font-semibold text-emerald-300 text-xs tracking-wider">
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Penerimaan Santri Baru TA 2026/2027</span>
+              </div>
+
+              {/* Title */}
+              <h1 className="font-black text-3xl sm:text-4xl md:text-6xl leading-[1.15] tracking-tight">
+                Mendidik Generasi <br />
+                <span className="bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-200 text-transparent">
+                  Qur'ani & Berilmu
+                </span>
               </h1>
-              <p className="max-w-xl text-emerald-100">
-                Mencetak generasi Qur'ani yang berilmu, berakhlak mulia, dan
-                siap membangun umat.
+
+              {/* Description */}
+              <p className="max-w-xl font-normal text-slate-300 text-base md:text-lg leading-relaxed">
+                Pesantren Abu Dzar memadukan keilmuan Islam otentik, kekuatan
+                hafalan Al-Qur'an, dan wawasan global untuk membentuk karakter
+                pemimpin masa depan.
               </p>
-              <div className="flex flex-wrap gap-3">
-                <Button asChild className="bg-emerald-500 hover:bg-emerald-600">
-                  <Link to="/sign-up">Daftar Sekarang</Link>
-                </Button>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-wrap items-center gap-4 pt-2">
                 <Button
                   asChild
+                  size="lg"
+                  className="bg-gradient-to-r from-emerald-500 hover:from-emerald-600 to-teal-500 hover:to-teal-600 shadow-emerald-500/25 shadow-xl px-7 rounded-xl font-semibold text-white">
+                  <Link to="/sign-up" className="flex items-center gap-2">
+                    <span>Daftar Sekarang</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </Button>
+
+                <Button
+                  asChild
+                  size="lg"
                   variant="outline"
-                  className="bg-transparent hover:bg-white/10 border-white/40 text-white hover:text-white">
-                  <a href="/#about">Selengkapnya</a>
+                  className="bg-white/10 hover:bg-white/20 backdrop-blur-md border-white/20 rounded-xl font-medium text-white transition-all">
+                  <a href="/#about" className="flex items-center gap-2">
+                    <PlayCircle className="w-4 h-4 text-emerald-400" />
+                    <span>Jelajahi Profil</span>
+                  </a>
                 </Button>
               </div>
             </div>
-          </AspectRatio>
-        </CardContent>
-      </Card>
+          </div>
+        </AspectRatio>
+      </div>
     </section>
   );
 }

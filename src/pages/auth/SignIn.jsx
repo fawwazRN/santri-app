@@ -1,9 +1,16 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export default function SignIn() {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate("/admin"); // nanti diganti logic auth beneran
+  };
   return (
     <div className="space-y-6 w-full max-w-sm">
       <div className="space-y-2 text-center">
@@ -21,14 +28,30 @@ export default function SignIn() {
         </p>
       </div>
 
-      <form className="space-y-4">
+      <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="nama@email.com" />
+          <div className="relative">
+            <Mail className="top-1/2 left-3 absolute size-4 text-muted-foreground -translate-y-1/2" />
+            <Input
+              id="email"
+              type="email"
+              placeholder="nama@email.com"
+              className="pl-9"
+            />
+          </div>
         </div>
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" placeholder="••••••••" />
+          <div className="relative">
+            <Lock className="top-1/2 left-3 absolute size-4 text-muted-foreground -translate-y-1/2" />
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              className="pl-9"
+            />
+          </div>
         </div>
 
         <Button

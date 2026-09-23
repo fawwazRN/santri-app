@@ -13,6 +13,11 @@ import DataSantri from "@/pages/admin/DataSantri";
 import DataPengajar from "@/pages/admin/DataPengajar";
 import Pengaturan from "@/pages/admin/Pengaturan";
 
+// tambah import
+import UserLayout from "@/layouts/UserLayout";
+import UserDashboard from "@/pages/user/Dashboard";
+import Hafalan from "./pages/user/Hafalan";
+
 export const router = createBrowserRouter([
   // ---- Guest ----
   {
@@ -38,6 +43,15 @@ export const router = createBrowserRouter([
       { path: "santri", element: <DataSantri /> }, // /admin/santri
       { path: "pengajar", element: <DataPengajar /> }, // /admin/pengajar
       { path: "pengaturan", element: <Pengaturan /> }, // /admin/pengaturan
+    ],
+  },
+  // tambah di array routes
+  {
+    path: "/user",
+    element: <UserLayout />,
+    children: [
+      { index: true, element: <UserDashboard /> },
+      { path: "hafalan", element: <Hafalan /> },
     ],
   },
 ]);

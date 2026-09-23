@@ -1,4 +1,4 @@
-import { Outlet } from "react-router";
+import { Navigate, Outlet } from "react-router";
 import { Bell, ChevronDown, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -17,8 +17,16 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Sidebar from "@/components/admin/Sidebar";
+import { useAuthStore } from "@/pages/auth/store/useAuthStore";
 
 export default function AdminLayout() {
+  const user = useAuthStore((state) => state.user);
+  if (!user) {
+    return <Navigate to="/sign-in" replace />;
+  }
+  if (user.role !== "admin") {
+    return <Navigate to="/user" replace />;
+  }
   return (
     <div className="flex min-h-screen">
       {/* Sidebar desktop */}

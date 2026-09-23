@@ -1,15 +1,45 @@
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { useAuthStore } from "./store/useAuthStore";
 
 export default function SignIn() {
-  const navigate = useNavigate();
+  /*   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     navigate("/admin"); // nanti diganti logic auth beneran
+  }; */
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+
+  const login = useAuthStore((state) => state.login);
+  const error = useAuthStore((state) => state.error);
+  const navigate = useNavigate();
+  const user = useAuthStore((state) => state.user);
+
+  if (!user) {
+    return <Navigate to="/sign-in" replace />;
+  } else if (user.role === "admin") {
+    return <Navigate to="/admin" replace />;
+  } else if (user.role === "user") {
+    return <Navigate to="/user" replace />;
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const isSuccess = login(email, pass);
+    if (isSuccess) {
+      const currentUser = useAuthStore.getState().user;
+      if (currentUser.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/user");
+      }
+    }
   };
   return (
     <div className="space-y-6 w-full max-w-sm">
@@ -27,7 +57,7 @@ export default function SignIn() {
           </Link>
         </p>
       </div>
-
+      {error && <p className="text-red-600">{error}</p>}
       <form className="space-y-4" onSubmit={handleSubmit}>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
@@ -37,6 +67,9 @@ export default function SignIn() {
               id="email"
               type="email"
               placeholder="nama@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              requied
               className="pl-9"
             />
           </div>
@@ -49,6 +82,8 @@ export default function SignIn() {
               id="password"
               type="password"
               placeholder="••••••••"
+              onChange={(e) => setPass(e.target.value)}
+              required
               className="pl-9"
             />
           </div>

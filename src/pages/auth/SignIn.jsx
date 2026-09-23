@@ -21,14 +21,13 @@ export default function SignIn() {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
 
-  if (!user) {
-    return <Navigate to="/sign-in" replace />;
-  } else if (user.role === "admin") {
-    return <Navigate to="/admin" replace />;
-  } else if (user.role === "user") {
-    return <Navigate to="/user" replace />;
+  if (user) {
+    if (user.role === "admin") {
+      return <Navigate to="/admin" replace />;
+    } else if (user.role === "user") {
+      return <Navigate to="/user" replace />;
+    }
   }
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const isSuccess = login(email, pass);

@@ -3,24 +3,29 @@ import { Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useAuthStore } from "./store/useAuthStore";
 
 export default function SignIn() {
-  /*   const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate("/admin"); // nanti diganti logic auth beneran
-  }; */
-  const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
+  // 1. Inisialisasi React Hook Form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      email: "email@gmail.com",
+      password: "123456",
+    },
+  });
 
   const login = useAuthStore((state) => state.login);
   const error = useAuthStore((state) => state.error);
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
 
+  // Jika user sudah login, redirect otomatis
   if (user) {
     if (user.role === "admin") {
       return <Navigate to="/admin" replace />;
@@ -28,9 +33,10 @@ export default function SignIn() {
       return <Navigate to="/user" replace />;
     }
   }
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const isSuccess = login(email, pass);
+
+  // 2. Fungsi submit menerima parameter 'data' dari React Hook Form
+  const onSubmit = (data) => {
+    const isSuccess = login(data.email, data.password);
     if (isSuccess) {
       const currentUser = useAuthStore.getState().user;
       if (currentUser.role === "admin") {
@@ -40,6 +46,7 @@ export default function SignIn() {
       }
     }
   };
+
   return (
     <div className="space-y-6 w-full max-w-sm">
       <div className="space-y-2 text-center">
@@ -56,8 +63,12 @@ export default function SignIn() {
           </Link>
         </p>
       </div>
-      {error && <p className="text-red-600">{error}</p>}
-      <form className="space-y-4" onSubmit={handleSubmit}>
+
+      {/* Error dari Zustand Store */}
+      {error && <p className="text-red-600 text-sm">{error}</p>}
+
+      <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+        {/* Field Email */}
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <div className="relative">
@@ -66,13 +77,24 @@ export default function SignIn() {
               id="email"
               type="email"
               placeholder="nama@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              requied
-              className="pl-9"
+              className={`pl-9 ${
+                errors.email ? "border-red-500 focus-visible:ring-red-200" : ""
+              }`}
+              {...register("email", {
+                required: "Email wajib diisi",
+                pattern: {
+                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                  message: "Format email tidak valid",
+                },
+              })}
             />
           </div>
+          {errors.email && (
+            <p className="text-red-500 text-xs">{errors.email.message}</p>
+          )}
         </div>
+
+        {/* Field Password */}
         <div className="space-y-2">
           <Label htmlFor="password">Password</Label>
           <div className="relative">
@@ -81,16 +103,34 @@ export default function SignIn() {
               id="password"
               type="password"
               placeholder="••••••••"
-              onChange={(e) => setPass(e.target.value)}
-              required
-              className="pl-9"
+              className={`pl-9 ${
+                errors.password
+                  ? "border-red-500 focus-visible:ring-red-200"
+                  : ""
+              }`}
+              {...register("password", {
+                required: "Password wajib diisi",
+                minLength: {
+                  value: 6,
+                  message: "Password minimal 6 karakter",
+                },
+              })}
             />
           </div>
+          {errors.password && (
+            <p className="text-red-500 text-xs">{errors.password.message}</p>
+          )}
         </div>
 
+        {/* Tombol Submit dengan Validasi Real-time */}
         <Button
           type="submit"
-          className="bg-emerald-600 hover:bg-emerald-700 w-full">
+          disabled={!isValid}
+          className={`w-full ${
+            isValid
+              ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}>
           Masuk
         </Button>
       </form>

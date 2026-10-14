@@ -5,19 +5,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { useAuthStore } from "./store/useAuthStore";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signInSchema } from "./schemas/schemas";
 
 export default function SignIn() {
-  // 1. Inisialisasi React Hook Form
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
   } = useForm({
     mode: "onChange",
-    defaultValues: {
-      email: "email@gmail.com",
-      password: "123456",
-    },
+    resolver: zodResolver(signInSchema),
   });
 
   const login = useAuthStore((state) => state.login);
@@ -34,7 +32,6 @@ export default function SignIn() {
     }
   }
 
-  // 2. Fungsi submit menerima parameter 'data' dari React Hook Form
   const onSubmit = (data) => {
     const isSuccess = login(data.email, data.password);
     if (isSuccess) {
@@ -64,7 +61,6 @@ export default function SignIn() {
         </p>
       </div>
 
-      {/* Error dari Zustand Store */}
       {error && <p className="text-red-600 text-sm">{error}</p>}
 
       <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -80,13 +76,7 @@ export default function SignIn() {
               className={`pl-9 ${
                 errors.email ? "border-red-500 focus-visible:ring-red-200" : ""
               }`}
-              {...register("email", {
-                required: "Email wajib diisi",
-                pattern: {
-                  value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                  message: "Format email tidak valid",
-                },
-              })}
+              {...register("email")}
             />
           </div>
           {errors.email && (
@@ -108,13 +98,7 @@ export default function SignIn() {
                   ? "border-red-500 focus-visible:ring-red-200"
                   : ""
               }`}
-              {...register("password", {
-                required: "Password wajib diisi",
-                minLength: {
-                  value: 6,
-                  message: "Password minimal 6 karakter",
-                },
-              })}
+              {...register("password")}
             />
           </div>
           {errors.password && (
@@ -122,10 +106,9 @@ export default function SignIn() {
           )}
         </div>
 
-        {/* Tombol Submit dengan Validasi Real-time */}
         <Button
           type="submit"
-          disabled={!isValid}
+          // disabled={!isValid}
           className={`w-full ${
             isValid
               ? "bg-emerald-600 hover:bg-emerald-700 text-white"
